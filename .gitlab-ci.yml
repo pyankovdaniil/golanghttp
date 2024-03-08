@@ -20,6 +20,7 @@ build:
   script:
     - pwd
     - ls -la
+    - chmod +x ./build.sh
     - "./build.sh"
   artifacts:
     paths:
@@ -32,6 +33,7 @@ unit_test:
   script:
     - pwd
     - ls -la
+    - chmod +x ./scripts/unit-tests.sh
     - "./scripts/unit-tests.sh"
   artifacts:
     paths:
@@ -43,6 +45,7 @@ lint_test:
   script:
     - pwd
     - ls -la
+    - chmod +x ./scripts/lint.sh
     - "./scripts/lint.sh"
   artifacts:
     paths:
