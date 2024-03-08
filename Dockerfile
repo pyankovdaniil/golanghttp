@@ -1,4 +1,4 @@
-FROM golang:1.16-apline
+FROM golang:1.16-alpine
 
 COPY ./src/build/test-app /usr/local/bin/test-app
 
