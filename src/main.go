@@ -7,7 +7,7 @@ import (
 
 func main() {
     http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        fmt.Fprintf("VERSION: 1.0.0 Hello, you've requested: %s\n", r.URL.Path)
+        fmt.Fprintf(w, "VERSION: 1.0.0 Hello, you've requested: %s\n", r.URL.Path)
     })
 
     fmt.Println("Web app running on localhost:3000")
