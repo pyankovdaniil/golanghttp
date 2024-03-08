@@ -1,0 +1,62 @@
+stages:
+  - build
+  - test
+  - dockerize
+
+variables:
+  TZ: "Europe/Moscow"
+
+.ci_vars: &ci_vars
+  image: golang:1.16-alpine
+  variables:
+    GIT_STRATEGY: clone
+  only:
+    changes:
+      - package.json
+
+build:
+  <<: *ci_vars
+  stage: build
+  script:
+    - pwd
+    - ls -la
+    - "./build.sh"
+  artifacts:
+    paths:
+    - ./src/build/test-app
+    expire_in: 5 min
+
+unit_test:
+  <<: *ci_vars
+  stage: test
+  script:
+    - pwd
+    - ls -la
+    - "./scripts/unit-tests.sh"
+  artifacts:
+    paths:
+    - ./unit_tests_results.log
+
+lint_test:
+  <<: *ci_vars
+  stage: test
+  script:
+    - pwd
+    - ls -la
+    - "./scripts/lint.sh"
+  artifacts:
+    paths:
+    - ./linter_results.log
+
+dockerize:
+  only:
+    changes:
+      - package.json
+  stage: dockerize
+  script:
+    - export SERVICE_VERSION=`grep 'version' package.json | cut -d '"' -f4 | tr '\n' '\0'`
+
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
+
+    - docker build -t $CI_REGISTRY_IMAGE:$SERVICE_VERSION .
+    - docker push $CI_REGISTRY_IMAGE:$SERVICE_VERSION
